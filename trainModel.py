@@ -1,11 +1,8 @@
 import numpy as np
 import pandas as pd
-# import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
 
 def load(path: str) -> pd.DataFrame:
-    """
-    Load a CSV file into a pandas DataFrame
-    """
     try:
         if not isinstance(path, str):
             raise ValueError("Path must be a string")
@@ -18,7 +15,6 @@ def load(path: str) -> pd.DataFrame:
     return dataset
 
 def __main__():
-	"""Main function to execute the script."""
 	filepath = "data.csv"
 	df = load(filepath)
 	if df is None:
@@ -38,12 +34,17 @@ def __main__():
 	
 	nb_iterations = 1000
 
+	def get_prediction(x):
+		return theta1 * x + theta0
+
 	for iteration in range(nb_iterations):
 		sum_erreurs = 0.0
 		sum_erreurs_ponderees = 0.0
 
+
 		for i in range(m):
-			prediction = theta0 + theta1 * km_normalized[i]
+			prediction = get_prediction(km_normalized[i])
+			# theta0 + theta1 * km_normalized[i]
 			# print(prediction)
 			erreur = prediction - price[i]
 			sum_erreurs += erreur
@@ -51,8 +52,14 @@ def __main__():
 
 		theta0 = theta0 - (learningRate * 1/m * sum_erreurs)
 		theta1 = theta1 - (learningRate * 1/m * sum_erreurs_ponderees)
-	
+
 	theta1 = theta1 / km_max
+
+	mymodel = list(map(get_prediction, km))
+	plt.scatter(price, km)
+	plt.plot(mymodel, km, "r")
+	plt.savefig('linear_regression_plot.png')
+	
 
 	with open("thetas.txt", "w") as f:
 		f.write(str(theta0))
