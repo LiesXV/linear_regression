@@ -32,7 +32,7 @@ def __main__():
 	theta0 = 0
 	theta1 = 0
 	
-	nb_iterations = 1000
+	nb_iterations = 500
 
 	def get_prediction(x):
 		return theta1 * x + theta0
@@ -60,6 +60,19 @@ def __main__():
 	plt.plot(mymodel, km, "r")
 	plt.savefig('linear_regression_plot.png')
 	
+	tolerance = 750
+	tp = 0
+	fn = 0
+
+	for i in range (m):
+		estimatedPrice = theta0 + theta1 * km[i]
+		if estimatedPrice > price[i] + tolerance or estimatedPrice < price[i] - tolerance:
+			fn += 1
+		else:
+			tp += 1
+
+	accuracy = tp / (tp + fn) * 100
+	print(f"Prédictions correctes à ±{tolerance} € près : {tp}/{m} ({accuracy:.1f} %)")
 
 	with open("thetas.txt", "w") as f:
 		f.write(str(theta0))
