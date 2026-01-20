@@ -41,8 +41,11 @@ def __main__():
 		sum_erreurs = 0.0
 		sum_erreurs_ponderees = 0.0
 
+
 		for i in range(m):
 			prediction = get_prediction(km_normalized[i])
+			# theta0 + theta1 * km_normalized[i]
+			# print(prediction)
 			erreur = prediction - price[i]
 			sum_erreurs += erreur
 			sum_erreurs_ponderees += erreur * km_normalized[i]
@@ -51,6 +54,25 @@ def __main__():
 		theta1 = theta1 - (learningRate * 1/m * sum_erreurs_ponderees)
 
 	theta1 = theta1 / km_max
+
+	mymodel = list(map(get_prediction, km))
+	plt.scatter(price, km)
+	plt.plot(mymodel, km, "r")
+	plt.savefig('linear_regression_plot.png')
+	
+	tolerance = 750
+	tp = 0
+	fn = 0
+
+	for i in range (m):
+		estimatedPrice = theta0 + theta1 * km[i]
+		if estimatedPrice > price[i] + tolerance or estimatedPrice < price[i] - tolerance:
+			fn += 1
+		else:
+			tp += 1
+
+	accuracy = tp / (tp + fn) * 100
+	print(f"Prédictions correctes à ±{tolerance} € près : {tp}/{m} ({accuracy:.1f} %)")
 
 	with open("thetas.txt", "w") as f:
 		f.write(str(theta0))
