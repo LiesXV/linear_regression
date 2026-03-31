@@ -12,9 +12,7 @@
 
 L’objectif est d’implémenter **de zéro** un algorithme de **régression linéaire** en Python, sans utiliser de bibliothèque de machine learning (comme scikit-learn).
 
-Le projet se divise en deux parties :
 - **Partie obligatoire** : Entraîner un modèle de régression linéaire simple (une variable explicative).
-- **Partie bonus** : Gestion de la régression linéaire multiple + visualisation + prédictions.
 
 ---
 
